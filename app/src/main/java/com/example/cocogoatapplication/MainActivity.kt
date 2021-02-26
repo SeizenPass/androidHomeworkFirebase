@@ -3,6 +3,8 @@ package com.example.cocogoatapplication
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -39,7 +41,23 @@ class MainActivity : AppCompatActivity() {
         "Mother Russia", 25)
 
         //databaseRef.setValue(employee)
+        var createActBtn = findViewById<Button>(R.id.createActID)
+        createActBtn.setOnClickListener {
+            var email = findViewById<EditText>(R.id.emailID).text.toString().trim()
+            var password = findViewById<EditText>(R.id.passwordID).text.toString().trim()
 
+            mAuth!!.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener{
+                    Log.d("VAL: ", it.isComplete.toString())
+                    if (it.isSuccessful) {
+                        var user: FirebaseUser = mAuth!!.currentUser!!
+                        Log.d("User: ", user.email.toString())
+                    } else {
+                        Log.d("Error: ", it.toString())
+                    }
+
+                }
+        }
         databaseRef.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var value = dataSnapshot.value as HashMap<String, Any>
