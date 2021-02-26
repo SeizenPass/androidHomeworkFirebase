@@ -1,5 +1,6 @@
 package com.example.cocogoatapplication
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -52,6 +53,12 @@ class MainActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         var user: FirebaseUser = mAuth!!.currentUser!!
                         Log.d("User: ", user.email.toString())
+                        Toast.makeText(this, "Account was created, moving to info fill.", Toast.LENGTH_LONG)
+                            .show()
+                        val intent = Intent(this, ProfileActivity::class.java)
+                        intent.putExtra("email", user.email.toString())
+                        intent.putExtra("password", password)
+                        startActivityForResult(intent, 0)
                     } else {
                         Log.d("Error: ", it.toString())
                     }
